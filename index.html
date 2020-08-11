@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="http://localhost:3000/auth/google?redirectUrl=">Login</a>
+    <button onclick="test">register</button>
+
+    <script>
+        document.querySelector("a").href += window.location.href;
+        
+        const parseCookie = (cookie = document.cookie) => {
+            cookie = cookie.split(', ');
+            var result = {};
+            for (var i = 0; i < cookie.length; i++) {
+                var cur = cookie[i].split('=');
+                result[cur[0]] = cur[1];
+            }
+            return result;
+        }
+
+        const getApiAuthorization = () => parseCookie().sessionid;
+
+        console.log("Session id", getApiAuthorization())
+
+        const connection = new WebSocket("ws://localhost:3000/ws");
+
+        connection.addEventListener("open", () => {
+            console.log("Connected");
+
+        });
+
+        connection.addEventListener("message", event => {
+            console.log(JSON.parse(event.data));
+        });
+
+        const send = (data) => connection.send(JSON.stringify(data))
+
+        const join = () => {
+            send({ 
+                type: "join-session",
+                authorization: getApiAuthorization(),
+                data: {
+                    chatName: "din-mamma"
+                }
+            })
+        }
+
+        const createChat = (name = "din-mamma") => {
+            send({
+                type: "new-chat",
+                authorization: getApiAuthorization(),
+                data: {
+                    name
+                }
+            })
+        }
+
+        const createMessage = (chatName = "din-mamma", text = "abc") => {
+            send({
+                type: "new-message",
+                authorization: getApiAuthorization(),
+                data: {
+                    chatName,
+                    text
+                }
+            })
+        }
+
+
+
+        const test = (url = "http://localhost:3000/api/v1/users/register", data = {
+                username: "BigBear",
+                image: "https://upload.wikimedia.org/wikipedia/commons/7/71/2010-kodiak-bear-1.jpg",
+                description: "I like bears"
+            }) => {
+
+            const xhr = new XMLHttpRequest;
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.withCredentials = true;
+
+           /* const data = {
+                username: "BigBear",
+                image: "https://upload.wikimedia.org/wikipedia/commons/7/71/2010-kodiak-bear-1.jpg",
+                description: "I like bears"
+            }*/
+
+            xhr.send(JSON.stringify(data));
+        }
+
+        //test();
+    </script>
+</body>
+
+</html>
