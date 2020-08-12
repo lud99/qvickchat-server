@@ -9,7 +9,7 @@ const clientOrigin = process.env.NODE_ENV === "development" ? process.env.DEV_UR
 const oAuth2Client = new OAuth2Client(
     process.env.GOOGLE_OAUTH_CLIENT_ID,
     process.env.GOOGLE_OAUTH_SECRET,
-    process.env.NODE_ENV === "development" ? process.env.GOOGLE_DEV_REDIRECT_URL : process.env.GOOGLE_DEV_REDIRECT_URL
+    process.env.NODE_ENV === "development" ? process.env.GOOGLE_DEV_REDIRECT_URL : process.env.GOOGLE_PROD_REDIRECT_URL
 );
 
 const getProfile = (idToken) => {
