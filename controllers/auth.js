@@ -69,8 +69,8 @@ exports.google = async (req, res) => {
         const { sessionId } = await SessionUtils.createSession(userId);
 
         const cookie = process.env.NODE_ENV === "development" ? 
-            ({ maxAge: parseInt(process.env.SESSION_AGE_MS) }) :
-            ({ maxAge: parseInt(process.env.SESSION_AGE_MS), sameSite: "none", secure: true });
+            ({ maxAge: parseInt(process.env.SESSION_AGE_MS), httpOnly: true }) :
+            ({ maxAge: parseInt(process.env.SESSION_AGE_MS), httpOnly: true, sameSite: "none", secure: true });
 
         // Send the session id to the client
         res.cookie("sessionid", sessionId, cookie);
