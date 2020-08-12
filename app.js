@@ -56,6 +56,7 @@ module.exports = () => {
         app.use("/auth", require("./routes/auth"));
 
         app.use("/api/v1/users", require("./routes/users"));
+        app.use("/api/v1/session", require("./routes/session"));
         app.use("/api/v1/chats", require("./routes/chats"));
         app.use("/api/v1/chats/messages", require("./routes/messages"));
 

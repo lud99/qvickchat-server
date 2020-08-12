@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    <a href="https://ludvigdev.cloudno.de/auth/google?redirectUrl=">Login</a>
+    <a href="">Login</a>
     <button onclick="test">register</button>
 
     <script>
-        document.querySelector("a").href += window.location.href;
+        const isDev = window.location.origin === "http://localhost:5500" || window.location.origin === "http://192.168.0.2:5500";
+
+        document.querySelector("a").href = (isDev ? "http://localhost:3000/auth/google" : "https://ludvigdev.cloudno.de/auth/google") + window.location.href;
 
         //document.cookie = "abc=2; SameSite=None; Secure;"
         
@@ -27,9 +29,18 @@
             return result;
         }
 
-        const getApiAuthorization = () => parseCookie().sessionid;
+        const getApiAuthorization = async () => {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", isDev ? "http://localhost:3000/api/v1/session" : "https://ludvigdev.cloudno.de/api/v1/session", true);
+                xhr.withCredentials = true;
 
-        console.log("Session id", getApiAuthorization())
+                xhr.addEventListener("load", () => resolve(JSON.parse(xhr.responseText).data.sessionId));
+                xhr.send();
+            });
+        }
+
+        getApiAuthorization().then(sessionid => console.log("Session id", sessionid))
 
         const connection = new WebSocket("wss://ludvigdev.cloudno.de/ws");
 
@@ -78,14 +89,14 @@
 
 
 
-        const test = (url = "https://ludvigdev.cloudno.de/api/v1/users/register", data = {
+        const test = (metod = "POST", url = "https://ludvigdev.cloudno.de/api/v1/users/register", data = {
                 username: "BigBear",
                 image: "https://upload.wikimedia.org/wikipedia/commons/7/71/2010-kodiak-bear-1.jpg",
                 description: "I like bears"
             }) => {
 
             const xhr = new XMLHttpRequest;
-            xhr.open("POST", url, true);
+            xhr.open(metod, url, true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.withCredentials = true;
 

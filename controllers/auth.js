@@ -9,7 +9,7 @@ const clientOrigin = process.env.NODE_ENV === "development" ? process.env.DEV_UR
 const oAuth2Client = new OAuth2Client(
     process.env.GOOGLE_OAUTH_CLIENT_ID,
     process.env.GOOGLE_OAUTH_SECRET,
-    process.env.GOOGLE_REDIRECT_URL
+    process.env.NODE_ENV === "development" ? process.env.GOOGLE_DEV_REDIRECT_URL : process.env.GOOGLE_DEV_REDIRECT_URL
 );
 
 const getProfile = (idToken) => {
@@ -68,8 +68,12 @@ exports.google = async (req, res) => {
         // Create the session
         const { sessionId } = await SessionUtils.createSession(userId);
 
+        const cookie = process.env.NODE_ENV === "development" ? 
+            ({ maxAge: parseInt(process.env.SESSION_AGE_MS) }) :
+            ({ maxAge: parseInt(process.env.SESSION_AGE_MS), sameSite: "none", secure: true });
+
         // Send the session id to the client
-        res.cookie("sessionid", sessionId, { maxAge: parseInt(process.env.SESSION_AGE_MS), sameSite: "none", secure: true });
+        res.cookie("sessionid", sessionId, cookie);
         res.set("Authorization", sessionId);
 
         /// Sign up
