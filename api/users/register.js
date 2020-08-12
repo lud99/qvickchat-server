@@ -1,4 +1,5 @@
 const User = require("../../modules/UserSchema");
+const { UserUtils } = require("../../utils/ApiUtils")
 
 const RouteError = require("../../utils/RouteError");
 
@@ -20,7 +21,9 @@ module.exports = async ({ googleId, username, image, description }) => {
 
         user.hasCompletedSignUp = true;
 
-        await user.save();
+        user = await user.save();
+        
+        return UserUtils.removeSensitiveData(user);
     } catch (error) {
         // Duplicate key error
         if (error.keyValue && error.keyValue.username && error.code === 11000)

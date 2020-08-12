@@ -69,7 +69,7 @@ exports.google = async (req, res) => {
         const { sessionId } = await SessionUtils.createSession(userId);
 
         // Send the session id to the client
-        res.cookie("sessionid", sessionId, { maxAge: process.env.SESSION_AGE_MS });
+        res.cookie("sessionid", sessionId, { maxAge: parseInt(process.env.SESSION_AGE_MS) });
         res.set("Authorization", sessionId);
 
         /// Sign up

@@ -48,17 +48,17 @@ const handleMessage = async (client, message) => {
 
         switch (message.type) {
             // Sessions
-            case "join-session": {
+            case "join-chat": {
                 const authSession = await getSession(message.authorization);
                 if (!authSession) return client.sendErrorResponse("Invalid authorization provided", message);
 
                 client.authorization = message.authorization;
 
-                const chatName = message.data.chatName;
+                const name = message.data.name;
 
-                client.joinSession(sessions, chatName);
+                client.joinSession(sessions, name);
 
-                const chat = await ChatApi.addConnectedUser({ name: chatName, googleId: authSession.googleId });
+                const chat = await ChatApi.addConnectedUser({ name, googleId: authSession.googleId });
 
                 const response = { chat }
 

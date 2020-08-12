@@ -1,7 +1,7 @@
 const Message = require("../modules/MessageSchema");
 const Chat = require("../modules/ChatSchema");
 const MessageApi = require("../api/messages");
-const UserUtils = require("../utils/User");
+const { UserUtils } = require("../utils/ApiUtils");
 
 const Response = require("../utils/Response");
 const RouteError = require("../utils/RouteError");
@@ -12,9 +12,9 @@ module.exports.create = async (req, res) => {
         const chatName = req.body.chatName;
         const googleId = req.session.googleId;
 
-        const chat = await MessageApi.create({ googleId, text, chatName })
+        const message = await MessageApi.create({ googleId, text, chatName });
         
-        res.json({ success: true, data: chat });   
+        res.json({ success: true, data: message });   
     } catch (error) {
         console.error(error);
 

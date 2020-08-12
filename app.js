@@ -57,6 +57,7 @@ module.exports = () => {
 
         app.use("/api/v1/users", require("./routes/users"));
         app.use("/api/v1/chats", require("./routes/chats"));
+        app.use("/api/v1/chats/messages", require("./routes/messages"));
 
         //app.listen(port, () => console.log(`Server running in ${process.env.node_ENV} mode on port ${port}`));
 

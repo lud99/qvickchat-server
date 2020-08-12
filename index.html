@@ -14,6 +14,8 @@
 
     <script>
         document.querySelector("a").href += window.location.href;
+
+        //document.cookie = "abc=2; SameSite=None; Secure;"
         
         const parseCookie = (cookie = document.cookie) => {
             cookie = cookie.split(', ');
@@ -44,10 +46,10 @@
 
         const join = () => {
             send({ 
-                type: "join-session",
+                type: "join-chat",
                 authorization: getApiAuthorization(),
                 data: {
-                    chatName: "din-mamma"
+                    name: "din-mamma"
                 }
             })
         }
@@ -63,14 +65,15 @@
         }
 
         const createMessage = (chatName = "din-mamma", text = "abc") => {
-            send({
-                type: "new-message",
-                authorization: getApiAuthorization(),
-                data: {
-                    chatName,
-                    text
-                }
-            })
+            send(
+{
+    type: "new-message",
+    authorization: getApiAuthorization(),
+    data: {
+        chatName,
+        text
+    }
+})
         }
 
 
