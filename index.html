@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <a href="http://localhost:3000/auth/google?redirectUrl=">Login</a>
+    <a href="https://ludvigdev.cloudno.de/auth/google?redirectUrl=">Login</a>
     <button onclick="test">register</button>
 
     <script>
@@ -31,7 +31,7 @@
 
         console.log("Session id", getApiAuthorization())
 
-        const connection = new WebSocket("ws://localhost:3000/ws");
+        const connection = new WebSocket("wss://ludvigdev.cloudno.de/ws");
 
         connection.addEventListener("open", () => {
             console.log("Connected");
@@ -78,7 +78,7 @@
 
 
 
-        const test = (url = "http://localhost:3000/api/v1/users/register", data = {
+        const test = (url = "https://ludvigdev.cloudno.de/api/v1/users/register", data = {
                 username: "BigBear",
                 image: "https://upload.wikimedia.org/wikipedia/commons/7/71/2010-kodiak-bear-1.jpg",
                 description: "I like bears"
